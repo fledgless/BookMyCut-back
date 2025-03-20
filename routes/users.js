@@ -66,37 +66,37 @@ router.post('/register', async (req, res) => {
 });
   
 
-// // Route pour se connecter (login)
-// router.post('/login', async (req, res) => {
-//   const { email, password } = req.body;
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    const sql = 'SELECT * FROM users WHERE email = ?';
 
-//   try {
-//     // Vérifier si l'utilisateur existe dans la base de données
-//     const [user] = await db.execute('SELECT * FROM Users WHERE email = ?', [email]);
+    connection.query(sql, [email], async (err, results) => {
+        if (err) {
+            return res.status(500).send({message:'Erreur lors de la connexion'});
 
-//     if (user.length === 0) {
-//       return res.status(400).json({ message: 'Utilisateur non trouvé' });
-//     }
+        }
+        
+        if (results.length === 0 || !(await bcrypt.compare(password, results[0].password))) {
+            
+            console.log(password , "ici le password" , "ici le mdp dcrypter :", results[0].password + results[0].email);
+            return res.status(401).send({ message: 'Nom d\'utilisateur ou mot de passe incorrect' });
+        }
 
-//     // Vérifier si le mot de passe est correct
-//     const isPasswordValid = await bcrypt.compare(password, user[0].password);
+        const user = { 
+            id: results[0].id,
+            lastname: results[0].lastname,
+            email: results[0].email,
+            firstName: results[0].firstname,
+            classe: results[0].classe,
+            createdAt: results[0].createdAT
+        };
+        const token = jwt.sign(
+            { id: user.id, lastname: user.lastname , firstName: user.firstName, classe: user.classe , createdAt : user.createdAt , email : user.email , password: user.password},
+            'secretKey',
+            { expiresIn: '1d' });
 
-//     if (!isPasswordValid) {
-//       return res.status(400).json({ message: 'Mot de passe incorrect' });
-//     }
-
-//     // Créer un token JWT
-//     const token = jwt.sign(
-//       { userId: user[0].user_id, username: user[0].username }, // Payload du token
-//       JWT_SECRET, // Clé secrète
-//       { expiresIn: '1h' } // Le token expire après 1 heure
-//     );
-
-//     res.status(200).json({ message: 'Connexion réussie', token });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: 'Erreur serveur' });
-//   }
-// });
+        res.status(200).send({ token });
+    });
+});
 
 module.exports = router;
