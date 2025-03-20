@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : jeu. 20 mars 2025 à 11:31
+-- Généré le : jeu. 20 mars 2025 à 13:50
 -- Version du serveur : 8.0.41-0ubuntu0.22.04.1
 -- Version de PHP : 8.1.2-1ubuntu2.20
 
@@ -179,6 +179,16 @@ ALTER TABLE `Users`
   ADD PRIMARY KEY (`user_id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `Users`
+--
+ALTER TABLE `Users`
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
