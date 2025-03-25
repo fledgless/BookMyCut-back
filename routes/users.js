@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const connection = require("../config/db");
 const router = express.Router();
+const verifyToken = require("../middlewares/verifyToken");
 
 const secretKey = process.env.JWT_SECRET;
 
@@ -130,5 +131,39 @@ router.post("/login", async (req, res) => {
     }
   );
 });
+
+router.get('/',async (req,res) => {
+  try {
+      const sql = "SELECT * FROM Users"
+
+      
+          connection.query(sql,  (err, result) => {
+              if (err) {
+                  return res.status(500).send(err);
+              }
+              res.status(200).json(result)
+          });
+      
+
+  } catch (err) {
+      return res.status(400).send(err)
+      
+  }
+})
+
+router.delete('/delete/:id', verifyToken , async(req, res) => {
+  const 
+      id = req.params.id,
+      sql = "DELETE FROM Users WHERE user_id = ?";
+
+  connection.query(sql, [id], (err, result) => {
+      if(err){
+          return res.status(500).send(err);
+      }
+      res.status(200).send('Utilisateur supprimer');
+
+      
+  })
+})
 
 module.exports = router;
