@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : jeu. 20 mars 2025 à 13:50
+-- Généré le : jeu. 20 mars 2025 à 14:05
 -- Version du serveur : 8.0.41-0ubuntu0.22.04.1
 -- Version de PHP : 8.1.2-1ubuntu2.20
 
@@ -118,7 +118,7 @@ CREATE TABLE `Users` (
   `password` varchar(255) NOT NULL,
   `prenom` varchar(255) DEFAULT NULL,
   `nomFamille` varchar(255) DEFAULT NULL,
-  `roles` tinyint(1) NOT NULL,
+  `roles` tinyint(1) NOT NULL DEFAULT '0',
   `pfpFilename` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
